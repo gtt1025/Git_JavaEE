@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+        "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="readerActionForm"
+			type="org.apache.struts.action.DynaActionForm">
+			<form-property name="id" type="java.lang.Integer" />
+			<form-property name="name" type="java.lang.String" />
+			<form-property name="password" type="java.lang.String" />
+			<form-property name="tel" type="java.lang.String" />
+			<form-property name="email" type="java.lang.String" />
+			<form-property name="description" type="java.lang.String" />
+			<form-property name="borrowId" type="java.lang.Integer" />
+			<form-property name="typer" type="java.lang.String" />
+			<form-property name="begin" type="java.lang.String" />
+			<form-property name="end" type="java.lang.String" />
+			<form-property name="bookTypes" type="java.lang.String" />
+			<form-property name="theName" type="java.lang.String" />
+		</form-bean>
+	</form-beans>
+	<global-forwards>
+		<forward name="showBorrowedBooks"
+			path="/front/showBorrowedBooks.jsp">
+		</forward>
+		<forward name="showReaderInfo"
+			path="/front/updateReaderInfo.jsp">
+		</forward>
+	</global-forwards>
+	<action-mappings>
+		<action path="/front/reader" name="readerActionForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			scope="request" validate="false" input="/front/loginfail.jsp"
+			parameter="method">
+			<forward name="success" path="/front/showBorrowedBooks.jsp" />
+			<forward name="faile" path="/front/index.jsp" />
+			<forward name="borrowedBooks" path="/front/reader.do" />
+		</action>
+	</action-mappings>
+	<controller processorClass="library.util.CharacterTrans" />
+
+</struts-config>

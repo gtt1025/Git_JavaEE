@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="library.domain.reader.Reader" table="reader_t"
+		schema="dbo" catalog="liber_db">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<many-to-one name="readerTypeT"
+			class="library.domain.readerType.ReaderType" fetch="select"
+			lazy="false">
+			<column name="type" />
+		</many-to-one>
+		<many-to-one name="operatorT"
+			class="library.domain.operator.Operator" fetch="select"
+			lazy="false">
+			<column name="operator" />
+		</many-to-one>
+		<property name="name" type="java.lang.String">
+			<column name="name" length="50" />
+		</property>
+		<property name="password" type="java.lang.String">
+			<column name="password" length="50" />
+		</property>
+		<property name="identiCode" type="java.lang.String">
+			<column name="identiCode" length="50" />
+		</property>
+		<property name="realName" type="java.lang.String">
+			<column name="realName" length="50" />
+		</property>
+		<property name="sex" type="java.lang.Short">
+			<column name="sex" />
+		</property>
+		<property name="papertype" type="java.lang.String">
+			<column name="papertype" length="50" />
+		</property>
+		<property name="paperNo" type="java.lang.String">
+			<column name="paperNo" length="50" />
+		</property>
+		<property name="tel" type="java.lang.String">
+			<column name="tel" length="50" />
+		</property>
+		<property name="email" type="java.lang.String">
+			<column name="email" length="50" />
+		</property>
+		<property name="registTime" type="java.util.Date">
+			<column name="registTime" length="23" />
+		</property>
+		<property name="description" type="java.lang.String">
+			<column name="description" length="200" />
+		</property>
+		<set name="borrowTs" inverse="false" lazy="false">
+			<key>
+				<column name="readerid" />
+			</key>
+			<one-to-many class="library.domain.borrow.Borrow" />
+		</set>
+	</class>
+</hibernate-mapping>

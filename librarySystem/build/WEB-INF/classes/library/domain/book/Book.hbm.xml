@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="library.domain.book.Book" table="book_t" schema="dbo"
+		catalog="liber_db" lazy="false">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<many-to-one name="booktypeT"
+			class="library.domain.bookType.BookType" fetch="select"
+			lazy="false">
+			<column name="type" />
+		</many-to-one>
+		<many-to-one name="operatorT"
+			class="library.domain.operator.Operator" fetch="select"
+			lazy="false">
+			<column name="operator" />
+		</many-to-one>
+		<property name="bookName" type="java.lang.String">
+			<column name="bookName" length="50" />
+		</property>
+		<property name="author" type="java.lang.String">
+			<column name="author" length="50" />
+		</property>
+		<property name="publisher" type="java.lang.String">
+			<column name="publisher" length="50" />
+		</property>
+		<property name="price" type="java.lang.Float">
+			<column name="price" precision="53" scale="0" />
+		</property>
+		<property name="inTime" type="java.util.Date">
+			<column name="inTime" length="23" />
+		</property>
+		<set name="barcodeTs" inverse="true" lazy="false">
+			<key>
+				<column name="bookid" />
+			</key>
+			<one-to-many class="library.domain.barcode.Barcode" />
+		</set>
+	</class>
+</hibernate-mapping>

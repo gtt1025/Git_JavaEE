@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="library.domain.borrow.Borrow" table="borrow_t"
+		schema="dbo" catalog="liber_db" lazy="false">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<many-to-one name="barcodeT"
+			class="library.domain.barcode.Barcode" fetch="select" lazy="false">
+			<column name="bookid" />
+		</many-to-one>
+		<many-to-one name="readerT" class="library.domain.reader.Reader"
+			fetch="select" lazy="false">
+			<column name="readerid" />
+		</many-to-one>
+		<many-to-one name="operatorTByBorrowOperator"
+			class="library.domain.operator.Operator" fetch="select"
+			lazy="false">
+			<column name="borrowOperator" />
+		</many-to-one>
+		<many-to-one name="operatorTByGivebackOperator"
+			class="library.domain.operator.Operator" fetch="select"
+			lazy="false">
+			<column name="givebackOperator" />
+		</many-to-one>
+		<property name="borrowTime" type="java.util.Date">
+			<column name="borrowTime" length="23" />
+		</property>
+		<property name="renew" type="java.lang.Short">
+			<column name="renew" />
+		</property>
+		<property name="forceBackTime" type="java.util.Date">
+			<column name="forceBackTime" length="23" />
+		</property>
+		<property name="giveback" type="java.lang.Short">
+			<column name="giveback" />
+		</property>
+		<property name="givebackTime" type="java.util.Date">
+			<column name="givebackTime" length="23" />
+		</property>
+	</class>
+</hibernate-mapping>

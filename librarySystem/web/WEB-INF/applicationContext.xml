@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+	<!-- 定义数据源 -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		destroy-method="close">
+		<!-- 指定连接数据库驱动 -->
+		<property name="driverClassName"
+			value="com.microsoft.jdbc.sqlserver.SQLServerDriver" />
+		<!-- 指定连接数据库url -->
+		<property name="url"
+			value="jdbc:microsoft:sqlserver://localhost:1433;DatabaseName=liber_db" />
+		<!-- 指定连接数据库用户名，密码为空 -->
+		<property name="username" value="sa" />
+		<property name="password" value="123456" />
+	</bean>
+	<!-- 定义Hibernate的sessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<!-- 指定数据源 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 指定Hibernate映射文件 -->
+		<property name="mappingResources">
+			<list>
+				<value>library/domain/barcode/Barcode.hbm.xml</value>
+				<value>library/domain/book/Book.hbm.xml</value>
+				<value>library/domain/bookType/BookType.hbm.xml</value>
+				<value>library/domain/borrow/Borrow.hbm.xml</value>
+				<value>library/domain/operator/Operator.hbm.xml</value>
+				<value>library/domain/reader/Reader.hbm.xml</value>
+				<value>
+					library/domain/readerType/ReaderType.hbm.xml
+				</value>
+				<value>
+					library/domain/liberInfo/LiberInfo.hbm.xml
+				</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<!-- 指定使用方言 -->
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.SQLServerDialect
+				</prop>
+				<!-- 是否在控制台输出sql语句 -->
+				<prop key="show_sql">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.jdbc.batch_size">20</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- 定义事务管理 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- 定义事务管理拦截器 -->
+	<bean id="transactionInterceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- 定义代理自动管理事务 -->
+	<bean id="ProxyCreator"
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<!-- 指定需要Spring管理事务的Bean -->
+		<property name="beanNames">
+			<list>
+				<value>frontFacade</value>
+				<value>sysLiberInfoFacade</value>
+				<value>bookInfoFacade</value>
+				<value>bookTypeFacade</value>
+				<value>borrowFacade</value>
+				<value>readerInfoFacade</value>
+				<value>readerTypeFacade</value>
+				<value>sysOperatorFacade</value>
+				<value>operatorUtilFacade</value>
+				<value>DWRMethods</value>
+			</list>
+		</property>
+		<!-- 调用事务管理拦截器 -->
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+			</list>
+		</property>
+	</bean>
+<!-- 把DAO注入给Session工厂 -->
+	<bean id="bookDAO" class="library.dao.book.BookDAOImpl">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="readerDAO" class="library.dao.reader.ReaderDAOImpl">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="readerTypeDAO"
+		class="library.dao.readerType.ReaderTypeDAOImpl">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="liberInfoDAO"
+		class="library.dao.liberInfo.LiberInfoDAOImpl">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="borrowDAO" class="library.dao.borrow.BorrowDAOImpl">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="barcodeDAO" class="library.dao.barcode.BarcodeDAOImpl">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="bookTypeDAO"
+		class="library.dao.bookType.BookTypeDAOImpl">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="operatorDAO"
+		class="library.dao.operator.OperatorDAOImpl">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+
+<!-- 把Service注入给DAO -->
+	<bean id="frontFacade"
+		class="library.service.front.FrontFacadeImpl">
+		<property name="bookDAO" ref="bookDAO"></property>
+		<property name="readerDAO" ref="readerDAO"></property>
+		<property name="barcodeDAO" ref="barcodeDAO"></property>
+		<property name="bookTypeDAO" ref="bookTypeDAO"></property>
+		<property name="readerTypeDAO" ref="readerTypeDAO"></property>
+		<property name="borrowDAO" ref="borrowDAO"></property>
+	</bean>
+	<bean id="sysLiberInfoFacade"
+		class="library.service.back.SysLiberInfoFacadeImpl">
+		<property name="liberInfoDAO" ref="liberInfoDAO"></property>
+	</bean>
+	<bean id="bookInfoFacade"
+		class="library.service.back.BookInfoFacadeImpl">
+		<property name="bookDAO" ref="bookDAO"></property>
+		<property name="bookTypeDAO" ref="bookTypeDAO"></property>
+		<property name="borrowDAO" ref="borrowDAO"></property>
+		<property name="barcodeDAO" ref="barcodeDAO"></property>
+		<property name="operatorDAO" ref="operatorDAO"></property>
+	</bean>
+	<bean id="bookTypeFacade"
+		class="library.service.back.BookTypeFacadeImpl">
+		<property name="bookTypeDAO" ref="bookTypeDAO"></property>
+		<property name="bookDAO" ref="bookDAO"></property>
+	</bean>
+	<bean id="borrowFacade"
+		class="library.service.back.BorrowFacadeImpl">
+		<property name="readerDAO" ref="readerDAO"></property>
+		<property name="borrowDAO" ref="borrowDAO"></property>
+		<property name="barcodeDAO" ref="barcodeDAO"></property>
+		<property name="bookDAO" ref="bookDAO"></property>
+		<property name="operatorDAO" ref="operatorDAO"></property>
+	</bean>
+	<bean id="readerInfoFacade"
+		class="library.service.back.ReaderInfoFacadeImpl">
+		<property name="readerDAO" ref="readerDAO"></property>
+		<property name="readerTypeDAO" ref="readerTypeDAO"></property>
+		<property name="borrowDAO" ref="borrowDAO"></property>
+		<property name="operatorDAO" ref="operatorDAO"></property>
+	</bean>
+	<bean id="readerTypeFacade"
+		class="library.service.back.ReaderTypeFacadeImpl">
+		<property name="readerTypeDAO" ref="readerTypeDAO"></property>
+		<property name="readerDAO" ref="readerDAO"></property>
+	</bean>
+	<bean id="sysOperatorFacade"
+		class="library.service.back.SysOperatorFacadeImpl">
+		<property name="operatorDAO" ref="operatorDAO"></property>
+	</bean>
+	<bean id="operatorUtilFacade"
+		class="library.service.back.OperatorUtilFacadeImpl">
+		<property name="operatorDAO" ref="operatorDAO"></property>
+	</bean>
+	<bean id="DWRMethods" class="library.service.dwr.DWRMethods">
+		<property name="bookTypeDAO" ref="bookTypeDAO"></property>
+		<property name="readerTypeDAO" ref="readerTypeDAO"></property>
+		<property name="liberInfoDAO" ref="liberInfoDAO"></property>
+		<property name="operatorDAO" ref="operatorDAO"></property>
+		<property name="readerDAO" ref="readerDAO"></property>
+	</bean>
+<!--  把Action注入给Service -->
+	<bean name="/front/reader"
+		class="library.webtier.front.FrontAction">
+		<property name="frontFacade" ref="frontFacade"></property>
+		<property name="sysLiberInfoFacade" ref="sysLiberInfoFacade"></property>
+	</bean>
+	<bean name="/back/bookInfo"
+		class="library.webtier.back.BookInfoAction">
+		<property name="bookInfoFacade" ref="bookInfoFacade"></property>
+	</bean>
+	<bean name="/back/booktype"
+		class="library.webtier.back.BookTypeAction">
+		<property name="bookTypeFacade" ref="bookTypeFacade"></property>
+	</bean>
+	<bean name="/back/borrow"
+		class="library.webtier.back.BorrowAction">
+		<property name="borrowFacade" ref="borrowFacade"></property>
+	</bean>
+	<bean name="/back/operatorUtil"
+		class="library.webtier.back.OperatorUtilAction">
+		<property name="operatorUtilFacade" ref="operatorUtilFacade"></property>
+	</bean>
+	<bean name="/back/readerInfo"
+		class="library.webtier.back.ReaderInfoAction">
+		<property name="readerInfoFacade" ref="readerInfoFacade"></property>
+	</bean>
+	<bean name="/back/readerType"
+		class="library.webtier.back.ReaderTypeAction">
+		<property name="readerTypeFacade" ref="readerTypeFacade"></property>
+	</bean>
+	<bean name="/back/sysLiberInfo"
+		class="library.webtier.back.SysLiberInfoAction">
+		<property name="sysLiberInfoFacade" ref="sysLiberInfoFacade"></property>
+	</bean>
+	<bean name="/back/sysOperator"
+		class="library.webtier.back.SysOperatorAction">
+		<property name="sysOperatorFacade" ref="sysOperatorFacade"></property>
+	</bean>
+</beans>

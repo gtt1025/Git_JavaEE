@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="library.domain.operator.Operator" table="operator_t"
+		schema="dbo" catalog="liber_db">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<property name="name" type="java.lang.String">
+			<column name="name" length="50" />
+		</property>
+		<property name="password" type="java.lang.String">
+			<column name="password" length="50" />
+		</property>
+		<property name="system" type="java.lang.Short">
+			<column name="system" />
+		</property>
+		<property name="reader" type="java.lang.Short">
+			<column name="reader" />
+		</property>
+		<property name="book" type="java.lang.Short">
+			<column name="book" />
+		</property>
+		<property name="borrow" type="java.lang.Short">
+			<column name="borrow" />
+		</property>
+		<property name="query" type="java.lang.Short">
+			<column name="query" />
+		</property>
+		<set name="readerTs" inverse="true">
+			<key>
+				<column name="operator" />
+			</key>
+			<one-to-many class="library.domain.reader.Reader" />
+		</set>
+		<set name="borrowTsForBorrowOperator" inverse="true">
+			<key>
+				<column name="borrowOperator" />
+			</key>
+			<one-to-many class="library.domain.borrow.Borrow" />
+		</set>
+		<set name="borrowTsForGivebackOperator" inverse="true">
+			<key>
+				<column name="givebackOperator" />
+			</key>
+			<one-to-many class="library.domain.borrow.Borrow" />
+		</set>
+		<set name="bookTs" inverse="true">
+			<key>
+				<column name="operator" />
+			</key>
+			<one-to-many class="library.domain.book.Book" />
+		</set>
+	</class>
+</hibernate-mapping>

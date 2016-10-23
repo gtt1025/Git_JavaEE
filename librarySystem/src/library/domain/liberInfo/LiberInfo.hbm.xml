@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="library.domain.liberInfo.LiberInfo" table="liberInfo_t"
+		schema="dbo" catalog="liber_db">
+		<id name="id" type="java.lang.Integer">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+		<property name="liberName" type="java.lang.String">
+			<column name="liberName" length="50" />
+		</property>
+		<property name="curator" type="java.lang.String">
+			<column name="curator" length="50" />
+		</property>
+		<property name="tel" type="java.lang.String">
+			<column name="tel" length="50" />
+		</property>
+		<property name="address" type="java.lang.String">
+			<column name="address" length="50" />
+		</property>
+		<property name="email" type="java.lang.String">
+			<column name="email" length="50" />
+		</property>
+		<property name="url" type="java.lang.String">
+			<column name="url" length="50" />
+		</property>
+		<property name="buildDate" type="java.util.Date">
+			<column name="buildDate" length="23" />
+		</property>
+		<property name="introduce" type="java.lang.String">
+			<column name="introduce" />
+		</property>
+	</class>
+</hibernate-mapping>

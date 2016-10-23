@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE struts-config PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+        "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="bookInfoActionForm"
+			type="org.apache.struts.action.DynaActionForm">
+			<form-property name="bookname" type="java.lang.String" />
+			<form-property name="id" type="java.lang.Integer" />
+			<form-property name="author" type="java.lang.String" />
+			<form-property name="publisher" type="java.lang.String" />
+			<form-property name="price" type="java.lang.Float" />
+			<form-property name="type" type="java.lang.Integer" />
+			<form-property name="num" type="java.lang.Integer" />
+			<form-property name="operator" type="java.lang.Integer" />
+			<form-property name="page" type="java.lang.Integer" />
+			<form-property name="bid" type="java.lang.Integer" />
+		</form-bean>
+		
+		<form-bean name="bookTypeActionForm"
+			type="org.apache.struts.action.DynaActionForm">
+			<form-property name="id" type="java.lang.Integer" />
+			<form-property name="name" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="borrowActionForm"
+			type="org.apache.struts.action.DynaActionForm">
+			<form-property name="operatorid" type="java.lang.Integer" />
+			<form-property name="barcode" type="java.lang.String" />
+			<form-property name="identiCode" type="java.lang.String" />
+			<form-property name="page" type="java.lang.Integer" />
+		</form-bean>
+		<form-bean name="operatorUtilActionForm"
+			type="org.apache.struts.action.DynaActionForm">
+			<form-property name="id" type="java.lang.Integer" />
+			<form-property name="name" type="java.lang.String" />
+			<form-property name="password" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="readerInfoActionForm"
+			type="org.apache.struts.action.DynaActionForm">
+			<form-property name="id" type="java.lang.Integer" />
+			<form-property name="name" type="java.lang.String" />
+			<form-property name="password" type="java.lang.String" />
+			<form-property name="realName" type="java.lang.String" />
+			<form-property name="sex" type="java.lang.Short" />
+			<form-property name="papertype" type="java.lang.String" />
+			<form-property name="paperNo" type="java.lang.String" />
+			<form-property name="tel" type="java.lang.String" />
+			<form-property name="email" type="java.lang.String" />
+			<form-property name="type" type="java.lang.Integer" />
+			<form-property name="description" type="java.lang.String" />
+			<form-property name="page" type="java.lang.Integer" />
+			<form-property name="operator" type="java.lang.Integer" />
+		</form-bean>
+		<form-bean name="readerTypeActionForm"
+			type="org.apache.struts.action.DynaActionForm">
+			<form-property name="id" type="java.lang.Integer" />
+			<form-property name="name" type="java.lang.String" />
+			<form-property name="quantity" type="java.lang.Integer" />
+		</form-bean>
+		<form-bean name="sysLiberInfoActionForm"
+			type="org.apache.struts.action.DynaActionForm">
+			<form-property name="id" type="java.lang.Integer" />
+			<form-property name="liberName" type="java.lang.String" />
+			<form-property name="curator" type="java.lang.String" />
+			<form-property name="tel" type="java.lang.String" />
+			<form-property name="address" type="java.lang.String" />
+			<form-property name="email" type="java.lang.String" />
+			<form-property name="url" type="java.lang.String" />
+			<form-property name="buildDate" type="java.lang.String" />
+			<form-property name="description" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="sysOperatorActionForm"
+			type="org.apache.struts.action.DynaActionForm">
+			<form-property name="id" type="java.lang.Integer" />
+			<form-property name="name" type="java.lang.String" />
+			<form-property name="password" type="java.lang.String" />
+			<form-property name="bookOper" type="java.lang.Short" />
+			<form-property name="borrowOper" type="java.lang.Short" />
+			<form-property name="queryOper" type="java.lang.Short" />
+			<form-property name="readerOper" type="java.lang.Short" />
+			<form-property name="sysOper" type="java.lang.Short" />
+		</form-bean>
+	</form-beans>
+	<global-forwards>
+		<forward name="error" path="/back/error.jsp"></forward>
+	</global-forwards>
+	<action-mappings>
+	
+		<action path="/back/bookInfo" name="bookInfoActionForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			scope="request" validate="false" input="" parameter="method">
+			<forward name="showALLBookInfo" path="/back/bookInfo.do" />
+			<forward name="showAllBook" path="/back/showAllBook.jsp" />
+			<forward name="updateBook" path="/back/updateBook.jsp" />
+
+		</action>
+		<action path="/back/booktype" name="bookTypeActionForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			scope="request" validate="false" input="" parameter="method">
+			<forward name="showBookType" path="/back/showBookType.jsp" />
+			<forward name="showType" path="/back/booktype.do" />
+			<forward name="updateBookType"
+				path="/back/updateBookType.jsp" />
+		</action>
+		<action path="/back/borrow" name="borrowActionForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			scope="request" validate="false" input="" parameter="method">
+			<forward name="showBorrowedBook"
+				path="/back/showBorrowedBook.jsp" />
+			<forward name="history"
+				path="/back/borrow.do?method=historyBorrowed" />
+			<forward name="warningBack" path="/back/warningBack.jsp" />
+			<forward name="borrowBook" path="/back/borrowBook.jsp" />
+			<forward name="giveBack" path="/back/giveBackBook.jsp" />
+		</action>
+
+		<action path="/back/operatorUtil" name="operatorUtilActionForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			scope="request" validate="false" input="" parameter="method">
+			<forward name="loginSuccess" path="/back/index.jsp" />
+			<forward name="updateSuccess" path="/back/main.jsp" />
+			<forward name="operatorlogin"
+				path="/back/operatorLogin.jsp" />
+		</action>
+		<action path="/back/readerInfo" name="readerInfoActionForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			scope="request" validate="false" input="" parameter="method">
+			<forward name="showAllReader"
+				path="/back/showAllReader.jsp" />
+			<forward name="showReaders" path="/back/readerInfo.do" />
+			<forward name="updateReaderInfo"
+				path="/back/updateReader.jsp" />
+
+		</action>
+		<action path="/back/readerType" name="readerTypeActionForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			scope="request" validate="false" input="" parameter="method">
+			<forward name="showAllReaderType"
+				path="/back/showAllReaderType.jsp" />
+			<forward name="showReaderTypes" path="/back/readerType.do" />
+			<forward name="updateReaderType"
+				path="/back/updateReaderType.jsp" />
+		</action>
+		<action path="/back/sysLiberInfo" name="sysLiberInfoActionForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			scope="request" validate="false" input="" parameter="method">
+			<forward name="updateLiberinfo"
+				path="/back/updateLiberInfo.jsp" />
+			<forward name="updateSuccess" path="/back/main.jsp" />
+		</action>
+		<action path="/back/sysOperator" name="sysOperatorActionForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			scope="request" validate="false" input="" parameter="method">
+			<forward name="showAllOperator"
+				path="/back/showAllOperator.jsp" />
+			<forward name="showOperators"
+				path="/back/sysOperator.do?method=findOperatorInfo" />
+			<forward name="update" path="/back/updateOperator.jsp" />
+		</action>
+
+	</action-mappings>
+	<controller processorClass="library.util.CharacterTrans" />
+	<message-resources parameter="LibrarySystemMessageResources" null="false"/>
+</struts-config>
